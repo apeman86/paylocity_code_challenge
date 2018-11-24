@@ -1,0 +1,47 @@
+# Ignore docs files
+_gh_pages
+_site
+.ruby-version
+package-lock.json
+
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.zip
+!dist/*.zip
+*.vi
+*~
+
+# OS or Editor folders
+.DS_Store
+._*
+Thumbs.db
+.cache
+.project
+.settings
+.sass-cache
+.publish
+Desktop.ini
+npm-debug.log
+.vscode
+
+# Folders to ignore
+node_modules
+typings
+dist
+test-dist
+coverage
+.scannerwork/
+
+# Files to ignore
+/config/local.json
+/config/default.json
+/config/development.json
+/config/production.json
+/config/test.json
+/config/id_rsa

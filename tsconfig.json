@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "declaration": false,
+    "module": "commonjs",
+    "target": "es6",
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "rootDir": ".",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "lib": [
+      "es2016",
+      "dom",
+      "es6",
+      "scripthost"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": [
+      "bluebird",
+      "body-parser",
+      "chai",
+      "chai-as-promised",
+      "config",
+      "express",
+      "express-serve-static-core",
+      "js-yaml",
+      "lodash",
+      "mocha",
+      "node",
+      "promises-a-plus",
+      "sinon",
+      "sinon-as-promised",
+      "superagent",
+      "supertest",
+      "when"
+    ]
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

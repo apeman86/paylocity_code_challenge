@@ -11,8 +11,10 @@ let ts = require('gulp-typescript');
 let sourcemaps = require('gulp-sourcemaps');
 let istanbul = require('gulp-istanbul');
 let remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul');
+let watch = require('gulp-watch');
 let del = require('del');
 let _ = require('lodash');
+let merge = require('merge-stream');
 
 /**
 * Paths.
@@ -30,15 +32,15 @@ const COVERAGE = 'coverage';
 * Globs.
 */
 
-const STATIC_APP_GLOB = ['src/**/*.html'];
-const SRC_FILE_GLOB = ['src/**/*.ts', 'typings/index.d.ts', 'custom_typings/index.d.ts'];
-const UNIT_TEST_GLOB = ['test/unit/**/*.spec.ts', 'typings/index.d.ts', 'custom_typings/index.d.ts']
+const STATIC_APP_GLOB = ['src/**/*.html', 'src/**/*.js', 'src/**/*.css'];
+const SRC_FILE_GLOB = ['src/**/*.ts', 'typings/index.d.ts'];
+const UNIT_TEST_GLOB = ['test/unit/**/*.spec.ts', 'typings/index.d.ts']
 const INTEGRATION_TEST_GLOB = ['test/integration/**/*.spec.ts'];
 const TEST_GLOB = _.union(UNIT_TEST_GLOB, INTEGRATION_TEST_GLOB);
 
 const APP_PROJECT = ts.createProject('tsconfig.json');
 
-gulp.task('default', ['server']);
+gulp.task('default', ['server', 'watch']);
 
 
 gulp.task('clean', () => {
@@ -54,10 +56,57 @@ const TSLINT_REPORT_OPTIONS = {
     summarizeFailureOutput: true
 };
 
+var copyLibTask = function () {
+  var assets = [
+      // Libs
+      {
+          src: 'node_modules/core-js/client/shim.min*.{js,map}',
+          dest: 'js/lib'
+      }, {
+          src: 'node_modules/zone.js/dist/zone*.{js,map}',
+          dest: 'js/lib'
+      }, {
+          src: 'node_modules/reflect-metadata/Reflect*.{js,map}',
+          dest: 'js/lib'
+      }, {
+          src: 'node_modules/systemjs/dist/system*.{js,map}',
+          dest: 'js/lib'
+      }, {
+          src: 'node_modules/@angular/**/*',
+          dest: 'js/lib/@angular'
+      }, {
+          src: 'node_modules/angular2-in-memory-web-api/**/*',
+          dest: 'js/lib/angular2-in-memory-web-api'
+      }, {
+          src: 'node_modules/rxjs/**/*',
+          dest: 'js/lib/rxjs'
+      }, {
+        src: 'node_modules/es5-shim/**/*',
+        dest: 'js/lib/es5-shim'
+      }, {
+        src: 'node_modules/es6-shim/**/*',
+        dest: 'js/lib/es6-shim'
+      }
+  ];
+
+  var mergedStreams = merge();
+
+  assets.forEach(function(asset) {
+      mergedStreams.add(gulp.src(asset.src)
+          .pipe(gulp.dest('dist/' + asset.dest))
+          .on('error', handleError)
+      );
+  });
+
+  return mergedStreams;
+};
+
+gulp.task('copy-libraries', copyLibTask);
+
   /**
  * Build application.
  */
-gulp.task('build', ['clean', 'lint'], () => {
+gulp.task('build', ['clean', 'copy-libraries', 'lint' ], () => {
     // Copy static content.
     gulp.src(STATIC_APP_GLOB)
         .pipe(gulp.dest(BUILD_PATH));
@@ -311,6 +360,11 @@ gulp.task('clean-unit-tests', () => {
     return gulp.src(['test/**/*.ts'])
         .pipe(tslint(TSLINT_OPTIONS))
         .pipe(tslint.report(TSLINT_REPORT_OPTIONS));
+  });
+
+  gulp.task('watch', function () {
+    return watch(STATIC_APP_GLOB.concat(SRC_FILE_GLOB))
+        .pipe(gulp.dest(BUILD_PATH));
   });
   
   /**

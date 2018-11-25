@@ -1,0 +1,101 @@
+body {
+    background-color: #e0e0e0;
+}
+
+h1 {
+    background-color: #64b5f6;
+    margin: -10px -10px 15px -10px;
+    padding: 20px;
+}
+
+.panel {
+    z-index: 1;
+    background-color: white;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.panel h2 {
+    background-color: #9be7ff;
+    padding: 10px;
+    margin: -10px -10px 15px -10px;
+}
+
+.personal-data {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5em;
+}
+
+.personal-data label {
+    margin: 0 0 2px 0;
+    font-weight: bold;
+}
+
+.personal-data input {
+    border: 1px lightgray;
+    border-style: solid;
+}
+
+div.main-content {
+    width: 80%;
+    margin: auto;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 667px) {
+    
+    div.main-content {
+        width: 100%;
+        margin: 0;
+    }
+
+    .personal-data {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.5em;
+    }
+
+    .personal-data input {
+        line-height: 44px;
+        margin: 0 2px 5px 2px;
+        padding: 0;
+    }
+}
+
+@media only screen and (min-width: 667px) and (max-width: 1024px) {
+
+    div.main-content {
+        width: 95%;
+    }
+
+    .panel h2 {
+        padding: 10px;
+        margin: -10px -10px 15px -10px;
+        font-size: 1.75em;
+    }
+
+    .personal-data {
+        display: flex;
+        flex-direction: column;
+        line-height: 2.5em;
+
+    }
+
+    .personal-data label {
+        margin: 0 0 3px 0;
+        font-weight: bold;
+        font-size: 1.25em;
+    }
+
+    .personal-data input {
+        line-height: 44px;
+        margin: 0 0 5px 0;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .panel {
+        max-width: 40%;
+    }
+}

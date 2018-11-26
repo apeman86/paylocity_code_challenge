@@ -9,6 +9,9 @@ let mocha = require('gulp-mocha');
 let nodemon = require('gulp-nodemon');
 let ts = require('gulp-typescript');
 let sourcemaps = require('gulp-sourcemaps');
+let karma = require('karma');
+let Promise = require("bluebird");
+let concatJSON = require("gulp-concat-json");
 let istanbul = require('gulp-istanbul');
 let remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul');
 let watch = require('gulp-watch');
@@ -22,10 +25,9 @@ let merge = require('merge-stream');
 
 const BUILD_PATH = 'dist';
 // const BUILD_PATH = BUILD_PATH + '/src';
-const TEST_BUILD_PATH = BUILD_PATH + '/test';
+const TEST_BUILD_PATH = '/test-dist';
 const UNIT_TEST_BUILD_PATH = TEST_BUILD_PATH + '/unit';
 const HELPERS_TEST_BUILD_PATH = TEST_BUILD_PATH + '/helpers';
-const INTEGRATION_TEST_BUILD_PATH = TEST_BUILD_PATH + '/integration';
 const COVERAGE = 'coverage';
 
 /**
@@ -34,11 +36,11 @@ const COVERAGE = 'coverage';
 
 const STATIC_APP_GLOB = ['src/**/*.html', 'src/**/*.js', 'src/**/*.css'];
 const SRC_FILE_GLOB = ['src/**/*.ts', 'typings/index.d.ts'];
-const UNIT_TEST_GLOB = ['test/unit/**/*.spec.ts', 'typings/index.d.ts']
-const INTEGRATION_TEST_GLOB = ['test/integration/**/*.spec.ts'];
-const TEST_GLOB = _.union(UNIT_TEST_GLOB, INTEGRATION_TEST_GLOB);
+const UNIT_TEST_GLOB = ['test/unit/**/*.spec.ts', 'typings/index.d.ts'];
+const TEST_GLOB = _.union(UNIT_TEST_GLOB);
 
 const APP_PROJECT = ts.createProject('tsconfig.json');
+const TEST_APP_PROJECT = ts.createProject('tsconfig.test.json');
 
 gulp.task('default', ['server', 'watch']);
 
@@ -136,64 +138,30 @@ gulp.task('build', ['clean', 'copy-libraries', 'lint' ], () => {
   });
 
   /**
- * Clean unit tests build directory.
- */
-
-gulp.task('clean-unit-tests', () => {
-    del.sync(UNIT_TEST_BUILD_PATH + '/**/*');
-  });
-  
-  /**
-   * Clean integation tests build directory.
+   * Clean unit tests build directory.
    */
-  
-  gulp.task('clean-integration-tests', () => {
-    del.sync(INTEGRATION_TEST_BUILD_PATH + '/**/*');
-  });
-  
+
+  gulp.task('clean-unit-tests', () => {
+      del.sync(UNIT_TEST_BUILD_PATH + '/**/*');
+    });
+
   /**
    * Build unit tests.
    */
   
-  gulp.task('build-unit-tests', ['build-test-helpers'], () => {
-      process.env.NODE_ENV = process.env.NODE_ENV || 'localtest';
-      return gulp.src(UNIT_TEST_GLOB)
-        .pipe(APP_PROJECT())
-        .js.pipe(sourcemaps.mapSources((sourcePath, file) => {
-          let depth = sourcePath.split('/').length + 2;
-          return `../`.repeat(depth) + 'test/unit/' + sourcePath;
-        }))
+  gulp.task('build-unit-tests', (done) => {
+    del('test-dist').then(() => {
+      gulp.src('src/**/*.ts').pipe(gulp.dest('test-dist/src'));
+      TEST_APP_PROJECT.src()
+        .pipe(sourcemaps.init())
+        .pipe(TEST_APP_PROJECT())
         .pipe(sourcemaps.write('.', {
-            includeContent: false
+          includeContent: true
         }))
-        .pipe(gulp.dest(UNIT_TEST_BUILD_PATH));
+        .pipe(gulp.dest('test-dist'))
+        .on('end', done)
+        .on('error', handleError);
     });
-  
-  gulp.task('build-test-helpers', ['build', 'clean-unit-tests', 'lint-tests'], () => {
-    var tsResult = gulp.src('test/helpers/**/*.ts')
-        .pipe(ts({
-          target: 'ES6', module: 'commonjs', strictNullChecks: true,
-          lib: ["es2016", "dom", "es6", "scripthost"]
-        }));
-  
-    return tsResult.js
-        .pipe(gulp.dest(TEST_BUILD_PATH + '/helpers'));
-  });
-  
-  /**
-   * Build integration tests.
-   */
-  
-  gulp.task('build-integration-tests', ['clean-integration-tests'], () => {
-    return gulp.src(INTEGRATION_TEST_GLOB)
-      .pipe(ts({ target: 'ES6', module: 'commonjs' }))
-      .js.pipe(sourcemaps.write('./', { 
-        includeContent: false,
-        mapSources: sourcePath => '../../../test/' + sourcePath
-      }))
-      .pipe(gulp.dest(INTEGRATION_TEST_BUILD_PATH));
-  
-  
   });
   
   /**
@@ -201,122 +169,100 @@ gulp.task('clean-unit-tests', () => {
    */
   
   gulp.task('build-tests', (done) => {
-    sequence('build-unit-tests', 'build-integration-tests', 'lint-tests', done);
+    sequence('lint-tests', 'build-unit-tests', done);
   });
   
-  /**
-   * Run unit tests.
-   */
-  
-  gulp.task('unit', ['build', 'build-unit-tests'], () => {
-    process.env.NODE_ENV = process.env.NODE_ENV || 'localtest';
-    return gulp.src([UNIT_TEST_BUILD_PATH + '/**/*.spec.js',HELPERS_TEST_BUILD_PATH + '/**/*.ts'], { read: false })
-      .pipe(mocha({ reporter: 'spec' }))
-      .on('error', handleError);
-  });
-  
-  /**
-   * Run integration tests.
-   */
-  
-  gulp.task('integration', ['build', 'build-integration-tests'], () => {
-    process.env.NODE_ENV = process.env.NODE_ENV || 'localtest';
-    return gulp.src(INTEGRATION_TEST_BUILD_PATH + '/**/*.spec.js', { read: false })
-      .pipe(mocha({ reporter: 'spec' }))
-      .on('error', handleError)
-      .pipe(exit());
-  });
   
   /**
    * Run all tests.
    */
   
-  gulp.task('test', (done) => {
-    sequence('unit', 'integration', done);
-  });
-  
-  /**
-   * Run single test.
-   * gulp single-test -test-file-name.spec
-   */
-  
-  gulp.task('single-test', ['build','build-integration-tests', 'build-unit-tests'], () => {
-    let testName = process.argv[3];
-    if (!testName) {
-      console.log('no test name found. Usage: gulp single-test -test-file-name.spec');
+  gulp.task('test', ['build-tests'], function(done) {
+    if (process.argv.indexOf('-s') > -1) {
+      console.log('Skipping Unit Tests!!!');
+      done();
+    } else {
+      runAppTests()
+        .then(runServerTests)
+        .catch(handleError)
+        .finally(() => done());
     }
-    // trim leading dashes
-    let nameStart = 0;
-    while (testName.charAt(nameStart) === '-') {
-      nameStart++;
-    }
-    testName = testName.substring(nameStart);
-    console.log('running tests for "' + testName + '"');
-    process.env.NODE_ENV = process.env.NODE_ENV || 'localtest';
-    return gulp.src([INTEGRATION_TEST_BUILD_PATH + '/**/' + testName + '.js',
-      UNIT_TEST_BUILD_PATH + '/**/' + testName + '.js',
-      INTEGRATION_TEST_BUILD_PATH + '/init.spec.js'])
-      .pipe(mocha({ reporter: 'spec' }))
-      .on('error', handleError)
-      .pipe(exit());
+  });
+
+  gulp.task('app-test', ['build-tests'], function(done) {
+    runAppTests()
+      .catch(handleError)
+      .finally(() => done());
   });
   
-  /**
-   * Clean the coverage folder.
-   */
-  
-  gulp.task('clean-coverage', () => {
-    return del.sync(COVERAGE + '/**/*');
+  gulp.task('server-test', ['build-tests'], function(done) {
+    runServerTests()
+      .catch(handleError)
+      .finally(() => done());
   });
   
-  /**
-   * Prepare istanbul for coverage.
+  /***
+   * Run coverage tests against compiled JS then remaps to show coverage against source TS.
    */
-  
-  gulp.task('pre-coverage', ['clean-coverage', 'build-tests'], () => {
-      return gulp.src(BUILD_PATH + '/**/*.js')
-          .pipe(istanbul({
-              includeUntested: true
-          }))
-          .pipe(istanbul.hookRequire());
+
+  gulp.task('coverage', function() {
+    sequence('app-test','run-server-coverage', function() {
+      gulp.src(['coverage/coverage-app.json','coverage/coverage-server.json'])
+        .pipe(concatJSON('coverage/coverage-final.json'))
+        .pipe(remapIstanbul({
+          reports: {
+            'text': '',
+            'json': './coverage/coverage-final.json',
+            'html': './coverage/html'
+          }
+        }))
+        .pipe(exit())
+        .on('error', handleError);
+    });
   });
-  
-  /**
-   * Run tests under istanbul coverage. Report to console and produce json for later remapping.
-   */
-  
-  gulp.task('run-coverage', ['clean-coverage', 'pre-coverage'], () => {
-    process.env.NODE_ENV = process.env.NODE_ENV || 'localtest';
-    //return gulp.src([INTEGRATION_TEST_BUILD_PATH + '/**/*.spec.js', UNIT_TEST_BUILD_PATH + '/**/*.spec.js'])
-    return gulp.src(UNIT_TEST_BUILD_PATH + '/**/*.spec.js')
+
+  gulp.task('app-coverage', ['app-test'], function() {
+    return gulp.src('coverage/coverage-app.json')
+      .pipe(remapIstanbul({
+        reports: {
+          'text': ''
+        }
+      }))
+      .pipe(exit())
+      .on('error', handleError);
+  });
+
+  gulp.task('server-coverage', ['run-server-coverage'], function() {
+    return gulp.src('coverage/coverage-server.json')
+      .pipe(remapIstanbul({
+        reports: {
+          'text': '',
+          'json': './coverage/coverage-server.json',
+          'html': './coverage/html'
+        }
+      }))
+      .pipe(exit())
+      .on('error', handleError);
+  });
+
+  gulp.task('pre-server-coverage', ['build-tests'], function() {
+    return gulp.src('test-dist/src/server/**/*.js')
+      .pipe(istanbul({
+        includeUntested: true
+      }))
+      .pipe(istanbul.hookRequire());
+  });
+
+  gulp.task('run-server-coverage', ['pre-server-coverage'], function() {
+    return gulp.src(['test-dist/test/server/**/*.spec.js'])
       .pipe(mocha({ reporter: 'spec' }))
       .pipe(istanbul.writeReports({
         reporters: ['json'],
         reportOpts: {
-          json: { dir: './coverage', file: 'coverage-js.json' }
+          json: { dir: './coverage', file: 'coverage-server.json' }
         }
       }));
   });
-  
-  gulp.task('showenv', () => {
-    process.env.NODE_ENV = process.env.NODE_ENV || 'localtest';
-    util.log('Environment is ' + process.env.NODE_ENV);
-  });
-  
-  /**
-   * Run coverage tests against compiled JS then remaps to show coverage against source TS.
-   */
-  
-  gulp.task('coverage', ['clean-coverage', 'pre-coverage', 'run-coverage'], () => {
-    return gulp.src('coverage/coverage-js.json')
-      .pipe(remapIstanbul({
-        reports: {
-          'text': '',
-          'json': './coverage/coverage-final.json',
-          'html': './coverage/html-report'
-        }
-      })).pipe(exit());;
-  })
   
   /**
    * Handle errors.
@@ -325,7 +271,7 @@ gulp.task('clean-unit-tests', () => {
   function handleError(err) {
     util.log(util.colors.red('ERROR...'));
     util.log(err);
-    this.emit('end');
+    process.exit(1);
   }
   
   /**
@@ -358,8 +304,10 @@ gulp.task('clean-unit-tests', () => {
   
   gulp.task('lint-tests', () => {
     return gulp.src(['test/**/*.ts'])
-        .pipe(tslint(TSLINT_OPTIONS))
-        .pipe(tslint.report(TSLINT_REPORT_OPTIONS));
+      .pipe(tslint({
+        configuration: './tslint.json'
+      }))
+      .pipe(tslint.report(TSLINT_REPORT_OPTIONS));
   });
 
   gulp.task('watch', function () {
@@ -374,4 +322,33 @@ gulp.task('clean-unit-tests', () => {
   process.once('SIGINT', function () {
     process.exit(0);
   });
+
+  function runAppTests() {
+    return new Promise((resolve, reject) => {
+      new karma.Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: process.argv.indexOf('-d') <= -1,
+        browsers: process.argv.indexOf('-d') > -1 ? ['Chrome'] : ['PhantomJS']
+      }, function (results) {
+        if (results === 1) {
+          let hardFail = process.argv.indexOf('-h');
+          if (hardFail > -1) {
+            reject(new Error('App unit tests failed. Please Fix.'));
+          } else {
+            console.error('App unit tests failed. Please Fix.');
+          }
+        }
+        resolve();
+      }).start();
+    });
+  }
+  
+  function runServerTests() {
+    return new Promise((resolve, reject) => {
+      gulp.src(['test-dist/test/server/**/*.spec.js'], { read: false })
+        .pipe(mocha({reporter: 'spec'}))
+        .on('end', resolve())
+        .on('error', (err) => reject(err));
+    });
+  }
   

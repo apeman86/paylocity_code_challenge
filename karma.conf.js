@@ -29,10 +29,6 @@ module.exports = function(config) {
       {pattern: 'node_modules/rxjs/**/*.js', included: false, watched: false},
       {pattern: 'node_modules/rxjs/**/*.js.map', included: false, watched: false},
 
-      // localforage
-      {pattern: 'node_modules/localforage/**/*.js', included: false, watched: false},
-      {pattern: 'node_modules/localforage/**/*.ts', included: false, watched: false},
-
       // Karma shim
       {pattern: 'angular-2-karma-test-shim.js', included: true, watched: true}, /* This is the thing that kicks off the angular js unit tests.*/
 
@@ -68,8 +64,7 @@ module.exports = function(config) {
 			'karma-coverage',
       'karma-htmlfile-reporter',
       'karma-chrome-launcher',
-      'karma-phantomjs-launcher',
-      'karma-remap-coverage'
+      'karma-phantomjs-launcher'
     ],
 
 		coverageReporter: {
@@ -85,14 +80,10 @@ module.exports = function(config) {
       outputFile: 'coverage/report/units.html'
     },
     // Coverage reporter generates the coverage
-    reporters: ['progress', 'coverage', 'html', 'remap-coverage'],
+    reporters: ['progress', 'coverage', 'html'],
 
     preprocessors: {
       'test-dist/src/app/**/*.js': ['coverage']
-    },
-
-    remapCoverageReporter: {
-      html: './coverage/html'
     },
 
     singleRun: true

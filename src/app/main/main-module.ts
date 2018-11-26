@@ -3,6 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {FormsModule} from '@angular/forms';
 import { MainApp } from './components/main-app';
+import { ContextService } from './services/context-service';
 
 @NgModule({
     imports: [
@@ -12,7 +13,7 @@ import { MainApp } from './components/main-app';
         FormsModule
     ],
     declarations: [MainApp],
-    providers: [],
+    providers: [ContextService],
     bootstrap: [MainApp],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

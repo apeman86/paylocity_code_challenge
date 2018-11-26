@@ -5,37 +5,32 @@
       "rxjs" : ["node_modules/rxjs"],
       "@angular/http" : ["node_modules/@angular/http"]
     },
-    "declaration": false,
-    "module": "commonjs",
+    "declaration": true,
     "target": "es5",
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "rootDir": ".",
-    "outDir": "./dist",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "noEmitOnError": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [
-      "es2016",
-      "dom",
-      "es5",
-      "es6",
-      "scripthost"
-    ],
+    "removeComments": false,
+    "noImplicitAny": false,
+    "rootDir": ".",
+    "outDir": "test-dist",
     "typeRoots": [
       "node_modules/@types"
     ],
     "types": [
       "core-js",
       "jasmine"
+    ],
+    "lib": [
+      "dom",
+      "es7"
     ]
   },
-  "include": [
-    "src/**/*",
-    "test/**/*"
-  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }

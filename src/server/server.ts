@@ -11,7 +11,7 @@ app.disable('x-powered-by');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+require('./routes/data-routes')(app);
 app.get('/app|css|fonts|img|js|server|favicon.ico', (req, res) => {
     res.sendFile(req.path, { root: 'dist' });
 });

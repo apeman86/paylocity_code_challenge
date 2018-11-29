@@ -10,17 +10,23 @@
     </div>
     <div class="personal-data-stored" *ngIf="employee.stored">
         <p>{{employee.firstName}} {{employee.lastName}}</p>
-        <button (click)="edit()">
-            <i class="material-icons md-18">edit</i>
-            Edit
-        </button>
+        <div>
+            <button (click)="edit()">
+                <i class="material-icons md-18">edit</i>
+                Edit
+            </button>
+            <button (click)="clear()">
+                <i class="material-icons md-18">clear_all</i>
+                Clear
+            </button>
+        </div>
     </div>
     <div *ngIf="!employee.stored" class="button-footer">
         <button class="primary" (click)="save()">Done</button>
         <button class="secondary" (click)="clear()">Clear</button>
     </div>
     <div class="dependents">
-        <h2>Dependents <button class="header_button" (click)="addDependent()">
+        <h2>Dependents <button class="header_button" (click)="addDependent()" *ngIf="employee.stored">
                 <i class="material-icons md-24">person_add</i>
                 Add Dependent
             </button></h2>

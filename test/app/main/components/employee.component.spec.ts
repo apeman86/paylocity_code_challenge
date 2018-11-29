@@ -6,6 +6,7 @@ import { DataService } from '../../../../src/app/main/http-services/data-service
 import { Observable } from 'rxjs/Rx';
 import { MockBackend } from '@angular/http/testing';
 import { BaseRequestOptions, Http } from '@angular/http';
+import { Dependent } from '../../../../src/app/main/models/dependent';
 
 describe('employee.component', () => {
     let dataService: DataService = jasmine.createSpyObj('DataService', ['getBenefitsData']);
@@ -54,6 +55,10 @@ describe('employee.component', () => {
         employeeComponent.clear();
         expect(employeeComponent.employee.benefit_cost).toBe(1000);
         expect(employeeComponent.employee.paycheck).toBe(2600);
+
+        employeeComponent.tempDependent = new Dependent();
+        employeeComponent.context.clearTempDependentSubject.next();
+        expect(employeeComponent.tempDependent).toBeUndefined();
     });
 
     it('save/edit', () => {
@@ -63,6 +68,16 @@ describe('employee.component', () => {
         expect(updateEmployeeSpy).toHaveBeenCalled();
 
         employeeComponent.edit();
+        expect(employeeComponent.employee.stored).toBe(false);
+
+        employeeComponent.employee.firstName = 'A';
+        employeeComponent.save();
+        expect(employeeComponent.employee.discount).toBe(true);
+        expect(employeeComponent.employee.stored).toBe(true);
+
+        employeeComponent.tempDependent = new Dependent();
+        employeeComponent.edit();
+        expect(employeeComponent.tempDependent).toBeUndefined();
         expect(employeeComponent.employee.stored).toBe(false);
     });
 
@@ -80,5 +95,7 @@ describe('employee.component', () => {
         employeeComponent.addDependent();
         expect(employeeComponent.tempDependent.id).toBe(0);
     });
+
+    // it('')
 
 });

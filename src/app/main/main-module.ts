@@ -7,6 +7,7 @@ import { ContextService } from './services/context-service';
 import { DataService } from './http-services/data-service';
 import { EmployeeComponent } from './components/employee.component';
 import { DependentComponent } from './components/dependent.component';
+import { PreviewComponent } from './components/preview.component';
 
 @NgModule({
     imports: [
@@ -15,7 +16,7 @@ import { DependentComponent } from './components/dependent.component';
         JsonpModule,
         FormsModule
     ],
-    declarations: [MainApp, EmployeeComponent, DependentComponent],
+    declarations: [MainApp, EmployeeComponent, DependentComponent, PreviewComponent],
     providers: [ContextService, DataService],
     bootstrap: [MainApp],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

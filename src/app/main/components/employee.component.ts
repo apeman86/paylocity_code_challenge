@@ -31,11 +31,17 @@ export class EmployeeComponent {
                     this.tempDependent = undefined;
                 }
             });
+            this.context.clearTempDependentObservable.subscribe(() => {
+                this.tempDependent = undefined;
+            });
         });
     }
 
     save(): void {
         this.employee.stored = true;
+        if (this.employee.firstName.toUpperCase().startsWith('A')) {
+            this.employee.discount = true;
+        }
         this.context.updateEmployee(this.employee);
     }
 
@@ -45,6 +51,9 @@ export class EmployeeComponent {
 
     edit(): void {
         this.employee.stored = false;
+        if (this.tempDependent) {
+            this.tempDependent = undefined;
+        }
     }
 
     addDependent(): void {

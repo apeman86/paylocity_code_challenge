@@ -4,9 +4,9 @@ body {
 }
 
 h1 {
-    background-color: #ff6f00;
+    background-image: linear-gradient(to right, #ff6f00, #9b0000);
     color: #ffffff;
-    margin: -10px -10px 15px -10px;
+    margin: -8px -8px 15px -10px;
     padding: 15px 15px 0px 15px;
     height: 58px;
 }
@@ -20,9 +20,9 @@ h1 {
 }
 
 .panel h2 {
-    background-color: #ff6f00;
+    background-image: linear-gradient(to right, #ff6f00, #9b0000);
     color: #ffffff;
-    padding: 15px 15px 0px 15px;
+    padding: 20px 15px 0px 15px;
     margin: -10px -10px 15px -10px;
     height: 48px;
 }
@@ -41,15 +41,133 @@ h1 {
 .personal-data input {
     border: 1px lightgray;
     border-style: solid;
+    padding: 0 0 0 10px;
 }
 
 div.main-content {
-    width: 80%;
+    width: 85%;
     margin: auto;
 }
 
 .dependents {
     margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.dependents div {
+    margin-top: 0;
+    border-bottom: lightgray solid .5px;
+}
+
+.dependents>div:first-of-type {
+    margin-top: 20px;
+}
+
+.dependents div:last-child {
+    border-bottom:none
+}
+
+.dependents div.button-footer {
+    margin-bottom: 10px;
+}
+
+.dependents div.personal-data {
+    border-bottom: none;
+}
+
+.dependents div.dependent, .dependents div.dependent div.personal-data-stored {
+    margin-top: 0;
+}
+
+.tabs {
+    display: flex;
+    flex: auto;
+}
+
+.tabs .tab {
+    max-height: 44px;
+    flex: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.tabs .tab.active {
+    color: #9b0000;
+    border-bottom: #9b0000 solid .5px;
+}
+
+.tabs .tab:hover {
+    cursor: pointer;
+}
+
+.underline{
+    border-bottom: black thin solid;
+}
+
+.overline {
+    border-top: black thin solid;
+}
+
+button.header_button {
+    z-index: 2;
+    border: none;
+    color: #000000;
+    background: #bdbdbd;
+}
+
+.grid {
+    margin-top: 20px;
+}
+
+.headers {
+    display: flex;
+    font-weight: bold;
+    border-bottom: black solid .5px;
+}
+
+.header1 {
+    width: 60%;
+    text-align: center;
+}
+
+.header2, .header3 {
+    width: 20%;
+    text-align: center;
+}
+
+.rows {
+    display: flex;
+    vertical-align: middle;
+}
+
+.cell1 {
+    width: 60%;
+    padding: 10px 3px;
+}
+
+.cell2 {
+    width: 20%;
+    text-align: right;
+    padding: 10px 3px;
+}
+
+.cell3 {
+    width: 20%;
+    text-align: center;
+    padding: 10px 3px;
+}
+
+div.rows:nth-child(odd) {
+    background: lightgray;
+}
+
+div.rows:last-child {
+    border-top: black thin solid;
+    font-weight: bold;
+    vertical-align: middle;
+    align-items: center;
 }
 
 .material-icons.md-18 { font-size: 18px; vertical-align: text-top}
@@ -57,6 +175,12 @@ div.main-content {
 .material-icons.md-36 { font-size: 36px; }
 
 @media only screen and (min-width: 320px) and (max-width: 667px) {
+
+    .material-icons.md-18 {
+        font-size: 24px;
+        vertical-align: text-top;
+        padding: 5px 5px 7px 6px;
+    }
     
     div.main-content {
         width: 100%;
@@ -75,25 +199,29 @@ div.main-content {
     .personal-data input {
         line-height: 44px;
         margin: 0 2px 5px 2px;
-        padding: 0;
     }
 
     .personal-data-stored {
         height: 48px;
         padding: 10px;
         display: flex;
-        margin-top: 25px;
+        margin: 25px -10px 0 -10px;
+        justify-content: space-between;
     }
 
-    .dependent {
-        height: 48px;
+    .personal-data-stored p {
+        text-align: center;
+    }
+
+    div.dependent {
         padding: 10px;
         display: flex;
+        flex-direction: column;
         margin-top: 0;
-        border-bottom: solid .5px
+        border-bottom: solid .5px black
     }
 
-    .dependent:last-child {
+    div.dependent:last-child {
         border-bottom: none;
     }
 
@@ -102,7 +230,10 @@ div.main-content {
         border: none;
         padding: 5px;
         margin-left: auto;
-        border-radius: 5px;
+        border-radius: 50%;
+        height: 44px;
+        width: 44px;
+        overflow: hidden;
         color: #ffffff;
         vertical-align: middle;
         font-size: 18px;
@@ -121,10 +252,6 @@ div.main-content {
         border-radius: 50%;
         height: 44px;
         width: 44px;
-        z-index: 2;
-        border: none;
-        color: #ffffff;
-        background: #9b0000;
         overflow: hidden;
         float: right;
         margin-right: 15px;
@@ -138,7 +265,12 @@ div.main-content {
         margin: 7px auto 10px auto;
     }    
 
-    .button-footer{
+    .button-footer {
+        margin-top: 10px;
+        display: flex;
+    }
+
+    .button-group {
         margin-top: 10px;
         display: flex;
     }
@@ -175,7 +307,7 @@ div.main-content {
     }
 
     .panel h2 {
-        padding: 10px;
+        padding: 15px 15px 0 15px;
         margin: -10px -10px 15px -10px;
         font-size: 1.75em;
     }
@@ -203,10 +335,10 @@ div.main-content {
     }
 
     .personal-data-stored {
-        height: 48px;
         padding: 10px;
         display: flex;
-        margin-top: 35px;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .personal-data-stored button {
@@ -219,6 +351,8 @@ div.main-content {
         vertical-align: middle;
         font-size: 18px;
         font-weight: bold;
+        height: 44px;
+        width: 120px;
     }
 
     .personal-data-stored button:hover {
@@ -226,7 +360,7 @@ div.main-content {
     }
 
     h2 button.header_button {
-        margin-top: 35px;
+        margin-top: 25px;
         width: 44px;
         padding: 0;
         border-radius: 50%;
@@ -234,10 +368,6 @@ div.main-content {
 
     button.header_button {
         height: 44px;
-        z-index: 2;
-        border: none;
-        color: #ffffff;
-        background: #9b0000;
         overflow: hidden;
         float: right;
         margin-right: 15px;
@@ -292,21 +422,31 @@ div.main-content {
     }
 
     .dependent {
-        height: 48px;
         padding: 10px;
         display: flex;
+        flex-direction: column;
         margin-top: 0;
-        border-bottom: solid .5px
+        border-bottom: solid .5px black
     }
 
     .dependent:last-child {
         border-bottom: none;
     }
+
+    .dependent .personal-data-stored {
+        margin-right: -10px;
+        margin-left: -10px;
+    }
 }
 
 @media only screen and (min-width: 1024px) {
     .panel {
-        max-width: 40%;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.5em;
+        width: 40vw;
+        margin: 10px;
+        min-height: 50%
     }
 
     .personal-data {
@@ -336,6 +476,8 @@ div.main-content {
         padding: 10px;
         display: flex;
         margin-top: 35px;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .personal-data-stored button {
@@ -348,6 +490,8 @@ div.main-content {
         vertical-align: middle;
         font-size: 18px;
         font-weight: bold;
+        width: 120px;
+        height: 44px;
     }
 
     .personal-data-stored button:hover {
@@ -362,10 +506,6 @@ div.main-content {
 
     button.header_button {
         height: 44px;
-        z-index: 2;
-        border: none;
-        color: #ffffff;
-        background: #9b0000;
         overflow: hidden;
         float: right;
         margin-right: 15px;
@@ -419,11 +559,8 @@ div.main-content {
         border: none;
     }
 
-    div.dependent>div.personal-data-stored {
-        border-bottom: solid .5px
-    }
-
-    div.dependent>div.personal-data-stored:last-of-type {
-        border-bottom: none;
+    div.main-content {
+        display: flex;
+        flex-direction: row;
     }
 }

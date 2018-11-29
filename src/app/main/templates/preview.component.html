@@ -1,0 +1,97 @@
+<div class="panel">
+    <h2>Benefit Costs</h2>
+    <div *ngIf="calculatedCosts">
+        <div class="tabs">
+            <div class="tab" [ngClass]="{'active': selectedTab==='biWeekly'}" (click)="selectTab('biWeekly')">Bi-Weekly</div>
+            <div class="tab" [ngClass]="{'active': selectedTab==='monthly'}" (click)="selectTab('monthly')">Monthly</div>
+        </div>
+        <div *ngIf="selectedTab==='biWeekly'">
+            <div class="grid">
+                <div class="headers">
+                    <div class="header1">Description</div>
+                    <div class="header2">Costs</div>
+                    <div class="header3">Discounted</div>
+                </div>
+                <div class="rows">
+                    <div class="cell1 underline">{{calculatedCosts.employeeName}}</div>
+                    <div class="cell2"></div>
+                    <div class="cell3"></div>
+                </div>
+                <div class="rows">
+                    <div class="cell1">Bi-Weekly Paycheck</div>
+                    <div class="cell2">{{calculatedCosts.biWeeklyPay}}</div>
+                    <div class="cell3"></div>
+                </div>
+                <div class="rows">
+                    <div class="cell1 underline">Employee Benefit Cost</div>
+                    <div class="cell2">{{calculatedCosts.biWeeklyCost}}</div>
+                    <div class="cell3">{{calculatedCosts.discounted}}</div>
+                </div>
+                <div class="rows" *ngIf="calculatedCosts.dependentsBiWeeklyCosts?.length > 0">
+                    <div class="cell1 underline">Dependents</div>
+                    <div class="cell2"></div>
+                    <div class="cell3"></div>
+                </div>
+                <div class="rows" *ngFor="let dependent of calculatedCosts.dependentsBiWeeklyCosts">
+                    <div class="cell1">{{dependent.dependentName}}</div>
+                    <div class="cell2">{{dependent.cost}}</div>
+                    <div class="cell3">{{dependent.discounted}}</div>
+                </div>
+                <div class="rows overline">
+                    <div class="cell1">Total Benefit Costs</div>
+                    <div class="cell2">{{calculatedCosts.biWeeklyTotalCost}}</div>
+                    <div class="cell3"></div>
+                </div>
+                <div class="rows">
+                    <div class="cell1">Paycheck After Benefit Costs</div>
+                    <div class="cell2">{{calculatedCosts.biWeeklyPay - calculatedCosts.biWeeklyTotalCost}}</div>
+                    <div class="cell3"></div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="selectedTab==='monthly'">
+                <div class="grid">
+                <div class="headers">
+                    <div class="header1">Description</div>
+                    <div class="header2">Costs</div>
+                    <div class="header3">Discounted</div>
+                </div>
+                <div class="rows">
+                    <div class="cell1 underline">{{calculatedCosts.employeeName}}</div>
+                    <div class="cell2"></div>
+                    <div class="cell3"></div>
+                </div>
+                <div class="rows">
+                    <div class="cell1">Monthly Paycheck</div>
+                    <div class="cell2">{{calculatedCosts.monthlyPay}}</div>
+                    <div class="cell3"></div>
+                </div>
+                <div class="rows">
+                    <div class="cell1 underline">Employee Benefit Cost</div>
+                    <div class="cell2">{{calculatedCosts.monthlyCost}}</div>
+                    <div class="cell3">{{calculatedCosts.discounted}}</div>
+                </div>
+                <div class="rows" *ngIf="calculatedCosts.dependentsMonthlyCosts?.length > 0">
+                    <div class="cell1 underline">Dependents</div>
+                    <div class="cell2"></div>
+                    <div class="cell3"></div>
+                </div>
+                <div class="rows" *ngFor="let dependent of calculatedCosts.dependentsMonthlyCosts">
+                    <div class="cell1">{{dependent.dependentName}}</div>
+                    <div class="cell2">{{dependent.cost}}</div>
+                    <div class="cell3">{{dependent.discounted}}</div>
+                </div>
+                <div class="rows overline">
+                    <div class="cell1">Total Benefit Costs</div>
+                    <div class="cell2">{{calculatedCosts.monthlyTotalCost}}</div>
+                    <div class="cell3"></div>
+                </div>
+                <div class="rows">
+                    <div class="cell1">Paycheck After Benefit Costs</div>
+                    <div class="cell2">{{calculatedCosts.monthlyPay - calculatedCosts.monthlyTotalCost}}</div>
+                    <div class="cell3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

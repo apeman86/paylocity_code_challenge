@@ -9,17 +9,20 @@
     </div>
     <div class="personal-data-stored" *ngIf="dependent.stored">
         <p>{{dependent.firstName}} {{dependent.lastName}}</p>
-        <button (click)="edit()">
-            <i class="material-icons md-18">edit</i>
-            Edit
-        </button>
-        <button (click)="remove()">
-            <i class="material-icons  md-18">remove_circle_outline</i>
-            Remove
-        </button>
+        <div>
+            <button (click)="edit()">
+                <i class="material-icons md-18">edit</i>
+                Edit
+            </button>
+            <button (click)="remove()">
+                <i class="material-icons  md-18">remove_circle_outline</i>
+                Remove
+            </button>
+        </div>
     </div>
     <div *ngIf="!dependent.stored" class="button-footer">
         <button class="primary" (click)="save()">Done</button>
         <button class="secondary" (click)="clear()">Clear</button>
+        <button class="secondary" (click)="cancel()">cancel</button>
     </div>
 </div>

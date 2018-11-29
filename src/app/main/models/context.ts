@@ -10,9 +10,13 @@ export class Context {
     discount_percentage: number;
     employeeSubject: Subject<Employee>;
     employeeObservable: Observable<Employee>;
+    clearTempDependentSubject: Subject<void>;
+    clearTempDependentObservable: Observable<void>;
     constructor() {
         this.employeeSubject = new Subject<Employee>();
         this.employeeObservable = this.employeeSubject.asObservable();
+        this.clearTempDependentSubject = new Subject<void>();
+        this.clearTempDependentObservable = this.clearTempDependentSubject.asObservable();
     }
 
     updateEmployee(employee: Employee | undefined): void {

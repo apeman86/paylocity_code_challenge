@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 export class Context {
     employee: Employee | undefined;
     employee_benefit_costs: number;
+    employee_paycheck_value: number;
     dependent_benefit_costs: number;
     discount_percentage: number;
     employeeSubject: Subject<Employee>;

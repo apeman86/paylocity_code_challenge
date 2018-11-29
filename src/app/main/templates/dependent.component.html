@@ -1,0 +1,25 @@
+<div class="dependent">
+    <div class="personal-data" *ngIf="!dependent.stored">
+        <label for="dependent_first_name_{{dependent.id}}">First Name</label>
+        <input type="text" id="dependent_first_name_{{dependent.id}}" [(ngModel)]="dependent.firstName" value="{{dependent.firstName}}" required/>
+    </div>
+    <div class="personal-data" *ngIf="!dependent.stored">
+        <label for="dependent_last_name_{{dependent.id}}">Last Name</label>
+        <input type="text" id="dependent_last_name_{{dependent.id}}" [(ngModel)]="dependent.lastName" value="{{dependent.lastName}}" required/>
+    </div>
+    <div class="personal-data-stored" *ngIf="dependent.stored">
+        <p>{{dependent.firstName}} {{dependent.lastName}}</p>
+        <button (click)="edit()">
+            <i class="material-icons md-18">edit</i>
+            Edit
+        </button>
+        <button (click)="remove()">
+            <i class="material-icons  md-18">remove_circle_outline</i>
+            Remove
+        </button>
+    </div>
+    <div *ngIf="!dependent.stored" class="button-footer">
+        <button class="primary" (click)="save()">Done</button>
+        <button class="secondary" (click)="clear()">Clear</button>
+    </div>
+</div>

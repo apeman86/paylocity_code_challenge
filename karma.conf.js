@@ -86,6 +86,8 @@ module.exports = function(config) {
       'test-dist/src/app/**/*.js': ['coverage']
     },
 
+    browserNoActivityTimeout: 100000,
+
     singleRun: true
   });
 };

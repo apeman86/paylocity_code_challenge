@@ -1,0 +1,34 @@
+<div class="panel">
+    <h2>Employee</h2>
+    <div class="personal-data" *ngIf="!employee.stored">
+        <label for="employee_first_name">First Name</label>
+        <input type="text" id="employee_first_name" [(ngModel)]="employee.firstName" value="{{employee.firstName}}" required/>
+    </div>
+    <div class="personal-data" *ngIf="!employee.stored">
+        <label for="employee_last_name">Last Name</label>
+        <input type="text" id="employee_last_name" [(ngModel)]="employee.lastName" value="{{employee.lastName}}" required/>
+    </div>
+    <div class="personal-data-stored" *ngIf="employee.stored">
+        <p>{{employee.firstName}} {{employee.lastName}}</p>
+        <button (click)="edit()">
+            <i class="material-icons md-18">edit</i>
+            Edit
+        </button>
+    </div>
+    <div *ngIf="!employee.stored" class="button-footer">
+        <button class="primary" (click)="save()">Done</button>
+        <button class="secondary" (click)="clear()">Clear</button>
+    </div>
+    <div class="dependents">
+        <h2>Dependents <button class="header_button" (click)="addDependent()">
+                <i class="material-icons md-24">person_add</i>
+                Add Dependent
+            </button></h2>
+        <div *ngIf="tempDependent">
+                <dependent [dependent]="tempDependent" [context]="context"></dependent>
+        </div>
+        <div *ngFor="let dependent of employee.dependents">
+            <dependent  [dependent]="dependent" [context]="context"></dependent>
+        </div>        
+    </div>
+</div>

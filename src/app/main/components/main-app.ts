@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ContextService } from '../services/context-service';
 
 @Component({
     selector: 'main-app',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
     templateUrl: '../templates/main-app.html'
 })
 export class MainApp {
+
+    constructor(private contextService: ContextService) {
+
+    }
+
+    clear(): void {
+        this.contextService.clear();
+    }
 
 }

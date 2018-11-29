@@ -4,6 +4,9 @@ import {HttpModule, JsonpModule} from '@angular/http';
 import {FormsModule} from '@angular/forms';
 import { MainApp } from './components/main-app';
 import { ContextService } from './services/context-service';
+import { DataService } from './http-services/data-service';
+import { EmployeeComponent } from './components/employee.component';
+import { DependentComponent } from './components/dependent.component';
 
 @NgModule({
     imports: [
@@ -12,8 +15,8 @@ import { ContextService } from './services/context-service';
         JsonpModule,
         FormsModule
     ],
-    declarations: [MainApp],
-    providers: [ContextService],
+    declarations: [MainApp, EmployeeComponent, DependentComponent],
+    providers: [ContextService, DataService],
     bootstrap: [MainApp],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

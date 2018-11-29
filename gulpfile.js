@@ -34,7 +34,7 @@ const COVERAGE = 'coverage';
 * Globs.
 */
 
-const STATIC_APP_GLOB = ['src/**/*.html', 'src/**/*.js', 'src/**/*.css'];
+const STATIC_APP_GLOB = ['src/**/*.html', 'src/**/*.js', 'src/**/*.css','src/**/*.ico'];
 const SRC_FILE_GLOB = ['src/**/*.ts', 'typings/index.d.ts'];
 const UNIT_TEST_GLOB = ['test/unit/**/*.spec.ts', 'typings/index.d.ts'];
 const TEST_GLOB = _.union(UNIT_TEST_GLOB);

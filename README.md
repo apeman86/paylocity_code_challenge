@@ -30,4 +30,6 @@ The config files in the `config` folder contain all information necessary for ru
 
 ### Unit Tests
 
-`npm test` will build the code and execute the unit tests.
+`gulp test` will build the code and execute the unit tests.
+
+`gulp coverage` will build execute unit tests and provided coverage for tested code.

@@ -40,7 +40,6 @@ coverage
 
 # Files to ignore
 /config/local.json
-/config/default.json
 /config/development.json
 /config/production.json
 /config/test.json

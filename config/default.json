@@ -1,0 +1,11 @@
+{
+    "port": 8650,
+    "employee": {
+        "paycheck_value": 2600,
+        "benefit_costs_per_year": 1000
+    },
+    "discount_percentage": 10,
+    "dependent": {
+        "benefit_costs_per_year": 500
+    }
+}

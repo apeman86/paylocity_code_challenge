@@ -1,10 +1,11 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
 import { ContextService } from '../../../../src/app/main/services/context-service';
 import { DataService } from '../../../../src/app/main/http-services/data-service';
 import { PreviewComponent } from '../../../../src/app/main/components/preview.component';
 import { TestBed } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 import { BaseRequestOptions, Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 import { Employee } from '../../../../src/app/main/models/employee';
 import { Dependent } from '../../../../src/app/main/models/dependent';
 
@@ -26,7 +27,7 @@ describe('preview.component', () => {
             ]
         });
         dataService = TestBed.get(DataService);
-        spyOn(dataService, 'getBenefitsData').and.returnValue(Observable.of({
+        spyOn(dataService, 'getBenefitsData').and.returnValue(observableOf({
             'employee': {
                 'benefit_cost_per_year': 1000,
                 'paycheck_value': 2600
@@ -37,7 +38,7 @@ describe('preview.component', () => {
             }
         }));
         contextService  = new ContextService(dataService);
-        spyOn(contextService, 'isInitialized').and.returnValue(Observable.of({}));
+        spyOn(contextService, 'isInitialized').and.returnValue(observableOf({}));
         previewComponent = new PreviewComponent(contextService);
     });
 

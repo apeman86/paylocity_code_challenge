@@ -1,6 +1,5 @@
 import { Employee } from './employee';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Subject ,  Observable } from 'rxjs';
 
 export class Context {
     employee: Employee | undefined;

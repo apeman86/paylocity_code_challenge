@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Context } from '../models/context';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Observable, Subject } from 'rxjs';
 import { Employee } from '../models/employee';
 import { DataService } from '../http-services/data-service';
 

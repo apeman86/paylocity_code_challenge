@@ -1,10 +1,11 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
 import { MainApp } from '../../../../src/app/main/components/main-app';
 import { ContextService } from '../../../../src/app/main/services/context-service';
 import { DataService } from '../../../../src/app/main/http-services/data-service';
 import { TestBed } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 import { BaseRequestOptions, Http } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 
 describe('main-app', () => {
     let dataService: DataService = jasmine.createSpyObj('DataService', ['getBenefitsData']);
@@ -24,7 +25,7 @@ describe('main-app', () => {
             ]
         });
         dataService = TestBed.get(DataService);
-        spyOn(dataService, 'getBenefitsData').and.returnValue(Observable.of({
+        spyOn(dataService, 'getBenefitsData').and.returnValue(observableOf({
             'employee': {
                 'benefit_cost_per_year': 1000,
                 'paycheck_value': 2600

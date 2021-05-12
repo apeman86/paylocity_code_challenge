@@ -4,7 +4,7 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { ContextService } from '../../../../src/app/main/services/context-service';
 import { Employee } from '../../../../src/app/main/models/employee';
 import { DataService } from '../../../../src/app/main/http-services/data-service';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 
 describe('context-service', () => {
     let benefitData = {

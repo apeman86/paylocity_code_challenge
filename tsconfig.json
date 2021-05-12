@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
+    "importHelpers": true,
     "paths": {
       "rxjs" : ["node_modules/rxjs"],
       "@angular/http" : ["node_modules/@angular/http"]
